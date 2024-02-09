@@ -20,14 +20,4 @@ prunt_gcode_parser = { path = "../prunt_gcode_parser" }
 prunt_stepgen = { path = "../prunt_stepgen" }
 
 [build-switches]
-release.optimization = [
-  "-O3",
-  "-gnatn",
-  "-fdata-sections",
-  "-ffunction-sections",
-  "-flto=auto",
-  "-fuse-linker-plugin",
-  "-fno-pie",
-  "-fno-pic",
-  "-ffat-lto-objects"
-]
+release.optimization = []
