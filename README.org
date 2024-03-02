@@ -1,0 +1,3 @@
+* Building for Pi 4
+- Run ~make~ in crosstool directory.
+- Run ~ADAFLAGS="-O3 -gnatn -fdata-sections -ffunction-sections -flto=auto -fuse-linker-plugin -ffat-lto-objects -mcpu=cortex-a72" alr build --release -- --config=./crosstool/build/crosstool-ng-toolchain/gcc-aarch64-unknown-linux-gnu/share/gpr/aarch64-unknown-linux-gnu.cgpr~
