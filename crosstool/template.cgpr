@@ -37,7 +37,7 @@ configuration project Default is
    for Archive_Suffix   use ".a";
    for Symbolic_Link_Supported use "true";
    for Library_Major_Minor_Id_Supported use "true";
-   for Library_Builder  use "/usr/lib/gprbuild/gprlib";
+   for Library_Builder  use "@@GPRBUILD_DIR@@/libexec/gprbuild/gprlib";
    for Library_Support  use "full";
    for Shared_Library_Prefix use "lib";
    for Shared_Library_Minimum_Switches use ("-shared");

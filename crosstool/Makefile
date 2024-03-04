@@ -22,7 +22,7 @@ build/crosstool-ng-1.26.0/build/bin/ct-ng: downloads/crosstool-ng-1.26.0.tar.xz
 	make -C build/crosstool-ng-1.26.0 install
 	touch $@
 
-build/crosstool-ng-toolchain/gcc-aarch64-unknown-linux-gnu: build/crosstool-ng-1.26.0/build/bin/ct-ng crosstool-ng.config build/gprbuild-x86_64-linux-22.0.0-1
+build/crosstool-ng-toolchain/gcc-aarch64-unknown-linux-gnu: build/crosstool-ng-1.26.0/build/bin/ct-ng crosstool-ng.config build/gprbuild-x86_64-linux-22.0.0-1 template.cgpr
 	mkdir -p build/crosstool-ng-toolchain
 	cp -u crosstool-ng.config build/crosstool-ng-toolchain/.config
 	cd build/crosstool-ng-toolchain && ../crosstool-ng-1.26.0/build/bin/ct-ng build
