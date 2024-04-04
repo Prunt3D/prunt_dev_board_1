@@ -2,8 +2,6 @@ with System;
 
 package body GPIO is
 
-   Pin_Is_Set : array (Pin_ID) of Boolean := [others => False];
-
    function Helper_GPIO_Initialise return System.Address with
      Import => True, Convention => C, External_Name => "helperGpioInitialise";
 
@@ -12,8 +10,7 @@ package body GPIO is
    for FSEL'Size use 3;
 
    type GPFSEL_Index is range 0 .. 9;
-   type GPFSEL is array (GPFSEL_Index range <>) of FSEL with
-     Pack;
+   type GPFSEL is array (GPFSEL_Index range <>) of FSEL;
    for GPFSEL'Component_Size use 3;
 
    type GPSET_Values is (No_Effect, Set);
@@ -21,8 +18,7 @@ package body GPIO is
    for GPSET_Values'Size use 1;
 
    type GPSET_Index is range 0 .. 31;
-   type GPSET is array (GPSET_Index range <>) of GPSET_Values with
-     Pack;
+   type GPSET is array (GPSET_Index range <>) of GPSET_Values;
    for GPSET'Component_Size use 1;
 
    type GPCLR_Values is (No_Effect, Clear) with
@@ -31,8 +27,7 @@ package body GPIO is
    for GPCLR_Values'Size use 1;
 
    type GPCLR_Index is range 0 .. 31;
-   type GPCLR is array (GPCLR_Index range <>) of GPCLR_Values with
-     Pack;
+   type GPCLR is array (GPCLR_Index range <>) of GPCLR_Values;
    for GPCLR'Component_Size use 1;
 
    type GPIO_Registers_Type is record
@@ -67,28 +62,33 @@ package body GPIO is
 
    procedure Set_Output_Mode (Pin : Pin_ID) is
    begin
-      GPIO_Registers.GPFSEL0 (GPFSEL_Index (Pin)) := Output;
+      if Pin < 10 then
+         GPIO_Registers.GPFSEL0 (GPFSEL_Index (Pin)) := Output;
+      elsif Pin < 20 then
+         GPIO_Registers.GPFSEL1 (GPFSEL_Index (Pin - 10)) := Output;
+      elsif Pin < 30 then
+         GPIO_Registers.GPFSEL2 (GPFSEL_Index (Pin - 20)) := Output;
+      end if;
    end Set_Output_Mode;
 
-   procedure Toggle_Output (Pin : Pin_ID) is
+   procedure Set_High (Pin : Pin_ID) is
    begin
-      if Pin_Is_Set (Pin) then
-         Pin_Is_Set (Pin) := False;
-         declare
-            Reg : GPCLR (0 .. 31) := [others => No_Effect];
-         begin
-            Reg (GPCLR_Index (Pin)) := Clear;
-            GPIO_Registers.GPCLR0   := Reg;
-         end;
-      else
-         Pin_Is_Set (Pin) := True;
-         declare
-            Reg : GPSET (0 .. 31) := [others => No_Effect];
-         begin
-            Reg (GPSET_Index (Pin)) := Set;
-            GPIO_Registers.GPSET0   := Reg;
-         end;
-      end if;
-   end Toggle_Output;
+      declare
+         Reg : GPSET (0 .. 31) := [others => No_Effect];
+      begin
+         Reg (GPSET_Index (Pin)) := Set;
+         GPIO_Registers.GPSET0   := Reg;
+      end;
+   end Set_High;
+
+   procedure Set_Low (Pin : Pin_ID) is
+   begin
+      declare
+         Reg : GPCLR (0 .. 31) := [others => No_Effect];
+      begin
+         Reg (GPCLR_Index (Pin)) := Clear;
+         GPIO_Registers.GPCLR0   := Reg;
+      end;
+   end Set_Low;
 
 end GPIO;
