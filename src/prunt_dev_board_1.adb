@@ -95,11 +95,11 @@ procedure Prunt_Dev_Board_1 is
       --  TODO
    end Get_Fan_Frequency;
 
-   type Input_Switch is (J5, J6, J7, J8);
+   type Input_Switch_Name is (J5, J6, J7, J8);
 
-   Input_Switch_Pin_Map : array (Input_Switch) of GPIO.Pin_ID := [J5 => 4, J6 => 17, J7 => 22, J8 => 18];
+   Input_Switch_Pin_Map : array (Input_Switch_Name) of GPIO.Pin_ID := [J5 => 4, J6 => 17, J7 => 22, J8 => 18];
 
-   function Get_Input_Switch_State (Switch : Stepper_Name) return Pin_State is
+   function Get_Input_Switch_State (Switch : Input_Switch_Name) return Pin_State is
    begin
       --  TODO
       return Low_State;
@@ -127,7 +127,7 @@ procedure Prunt_Dev_Board_1 is
       Set_Fan_PWM                 => Set_Fan_PWM,
       Set_Fan_Voltage             => Set_Fan_Voltage,
       Get_Fan_Frequency           => Get_Fan_Frequency,
-      Input_Switch_Name           => Stepper_Name,
+      Input_Switch_Name           => Input_Switch_Name,
       Get_Input_Switch_State      => Get_Input_Switch_State,
       Stepgen_Preprocessor_CPU    => 3,
       Stepgen_Pulse_Generator_CPU => 4,
