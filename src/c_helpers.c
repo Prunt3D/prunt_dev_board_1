@@ -8,6 +8,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <linux/i2c-dev.h>
+#include <sys/ioctl.h>
 
 static void checkHardwareRevision(void)
 {
@@ -73,4 +75,21 @@ void helperLockMemory(void)
 		fprintf(stderr, "mlockall failed\n");
 		exit(1);
 	}
+}
+
+int helperI2cInitialise(void)
+{
+	int fd = open("/dev/i2c-22", O_RDWR);
+
+	if (fd < 0) {
+		fprintf(stderr, "i2c open failed\n");
+		exit(1);
+	}
+
+	if (ioctl(fd, I2C_SLAVE, 115) < 0) {
+		fprintf(stderr, "i2c ioctl failed\n");
+		exit(1);
+	}
+
+	return fd;
 }

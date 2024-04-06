@@ -1,3 +1,7 @@
 * Building for Pi 4
 - Run ~make~ in crosstool directory.
 - Run ~ADAFLAGS="-O3 -gnatn -fdata-sections -ffunction-sections -flto=auto -fuse-linker-plugin -ffat-lto-objects -mcpu=cortex-a72" alr build --release -- --config=./crosstool/build/crosstool-ng-toolchain/gcc-aarch64-unknown-linux-gnu/share/gpr/aarch64-unknown-linux-gnu.cgpr~
+* Compiling ASN.1
+The src folder already contains the generated files. To create new files after a change, run the following commands in the asn directory:
+- ~asn1scc -Ada -ACN -atc -o a-out -t allboards -slim mcu_comms.acn mcu_comms.asn1~
+- ~asn1scc -c -ACN -atc -o c-out -t allboards -slim mcu_comms.acn mcu_comms.asn1~

@@ -1,0 +1,11 @@
+MCU-COMMS DEFINITIONS ::= BEGIN
+
+Packet-Type [post-encoding-function postencoding.my-encoding-patcher, post-decoding-validator postencoding.my-crc-validator]
+{
+    body-length-in-bytes NULL [pattern '0000'H, save-position, encoding pos-int, size 16],
+    packet-data-kind Packet-Data-Kind [encoding pos-int, size 8],
+    packet-data [determinant packet-data-kind],
+    packet-crc32 NULL [pattern '00000000'H, save-position, align-to-next byte]
+}
+
+END

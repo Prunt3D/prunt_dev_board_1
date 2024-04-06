@@ -1,0 +1,33 @@
+MCU-COMMS DEFINITIONS ::= BEGIN
+
+Setup-Type ::= SEQUENCE {
+    version INTEGER (0 .. 65535)
+}
+
+Inputs-Type ::= SEQUENCE {
+    stepper-fault     SEQUENCE (SIZE (6)) OF BOOLEAN,
+    adc-sequential-id INTEGER (0 .. 65535),
+    adc-temp-value    SEQUENCE (SIZE (4)) OF INTEGER (0 .. 65535),
+    fan-tach-count    SEQUENCE (SIZE (4)) OF INTEGER (0 .. 65535)
+}
+
+Outputs-Type ::= SEQUENCE {
+    heater-enable         BOOLEAN,
+    stepper-output-enable SEQUENCE (SIZE (6)) OF BOOLEAN,
+    stepper-enable        SEQUENCE (SIZE (6)) OF BOOLEAN,
+    fan-pwm               SEQUENCE (SIZE (4)) OF INTEGER (0 .. 639)
+}
+
+Packet-Data-Kind ::= ENUMERATED {setup, inputs, outputs}
+
+Packet-Data-Type ::= CHOICE {
+    setup   Setup-Type,
+    inputs  Inputs-Type,
+    outputs Outputs-Type
+}
+
+Packet-Type ::= SEQUENCE {
+    packet-data Packet-Data-Type
+}
+
+END
