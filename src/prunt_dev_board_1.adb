@@ -394,5 +394,18 @@ procedure Prunt_Dev_Board_1 is
 begin
    Helper_Lock_Memory;
    MCU_Comms_Runner.Start;
+
+   for P of Step_Pin_Map loop
+      GPIO.Set_Output_Mode (P);
+   end loop;
+
+   for P of Dir_Pin_Map loop
+      GPIO.Set_Output_Mode (P);
+   end loop;
+
+   for P of Input_Switch_Pin_Map loop
+      GPIO.Set_Input_Mode (P);
+   end loop;
+
    My_Glue.Run;
 end Prunt_Dev_Board_1;

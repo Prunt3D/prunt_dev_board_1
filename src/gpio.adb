@@ -51,6 +51,15 @@ package body GPIO is
    type GPCLR is array (GPCLR_Index range <>) of GPCLR_Values;
    for GPCLR'Component_Size use 1;
 
+   type GPLEV_Values is (Low, High) with
+     Volatile;
+   for GPLEV_Values use (Low => 0, High => 1);
+   for GPLEV_Values'Size use 1;
+
+   type GPLEV_Index is range 0 .. 31;
+   type GPLEV is array (GPLEV_Index range <>) of GPLEV_Values;
+   for GPLEV'Component_Size use 1;
+
    type GPIO_Registers_Type is record
       GPFSEL0 : GPFSEL (0 .. 9);
       GPFSEL1 : GPFSEL (0 .. 9);
@@ -62,6 +71,8 @@ package body GPIO is
       GPSET1  : GPSET (0 .. 25);
       GPCLR0  : GPCLR (0 .. 31);
       GPCLR1  : GPCLR (0 .. 25);
+      GPLEV0  : GPLEV (0 .. 31);
+      GPLEV1  : GPLEV (0 .. 25);
    end record;
 
    for GPIO_Registers_Type'Size use 16#F4# * 8;
@@ -76,6 +87,8 @@ package body GPIO is
       GPSET1  at 16#20# range 0 .. 25;
       GPCLR0  at 16#28# range 0 .. 31;
       GPCLR1  at 16#2C# range 0 .. 25;
+      GPLEV0  at 16#34# range 0 .. 31;
+      GPLEV1  at 16#38# range 0 .. 25;
    end record;
 
    GPIO_Registers : GPIO_Registers_Type with
@@ -91,6 +104,17 @@ package body GPIO is
          GPIO_Registers.GPFSEL2 (GPFSEL_Index (Pin - 20)) := Output;
       end if;
    end Set_Output_Mode;
+
+   procedure Set_Input_Mode (Pin : Pin_ID) is
+   begin
+      if Pin < 10 then
+         GPIO_Registers.GPFSEL0 (GPFSEL_Index (Pin)) := Input;
+      elsif Pin < 20 then
+         GPIO_Registers.GPFSEL1 (GPFSEL_Index (Pin - 10)) := Input;
+      elsif Pin < 30 then
+         GPIO_Registers.GPFSEL2 (GPFSEL_Index (Pin - 20)) := Input;
+      end if;
+   end Set_Input_Mode;
 
    procedure Set_High (Pin : Pin_ID) is
    begin
@@ -111,5 +135,10 @@ package body GPIO is
          GPIO_Registers.GPCLR0   := Reg;
       end;
    end Set_Low;
+
+   function Is_High (Pin : Pin_ID) return Boolean is
+   begin
+      return GPIO_Registers.GPLEV0 (GPLEV_Index (Pin)) = High;
+   end Is_High;
 
 end GPIO;
